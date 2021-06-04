@@ -11,7 +11,7 @@
 
 ​	放一张截图：
 
-![效果](.\publish\yeah.png)
+![效果](./publish/yeah.png)
 
 
 
