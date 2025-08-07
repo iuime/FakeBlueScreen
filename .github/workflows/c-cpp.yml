@@ -17,11 +17,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 查找 GCC 安装路径并打印
-      - name: Find gcc path
+      # 列出当前工作目录的文件
+      - name: List project files
         run: |
-          where gcc
-          
+          dir  # 在 Windows 上列出当前工作目录的所有文件
+
       # 使用 GCC 编译项目
       - name: Build FakeBlueScreen
         run: |
