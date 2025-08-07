@@ -17,21 +17,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 安装 Chocolatey
-      - name: Install Chocolatey
+      # 查找 GCC 安装路径并打印
+      - name: Find gcc path
         run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-      # 使用 Chocolatey 安装 MinGW GCC
-      - name: Install MinGW with Chocolatey
-        run: choco install mingw --yes
-
-      # 编译项目
+          where gcc
+          
+      # 使用 GCC 编译项目
       - name: Build FakeBlueScreen
         run: |
-          C:\tools\mingw\bin\gcc -o FakeBlueScreen FakeBlueScreen.c -lgdi32 -luser32
+          gcc -o FakeBlueScreen FakeBlueScreen.c -lgdi32 -luser32
 
       # 上传编译后的文件
       - name: Upload executable
