@@ -17,19 +17,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 列出当前工作目录的文件
+      # 确保安装 .NET SDK
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0'  # 可以根据你的项目选择合适的版本
+
+      # 列出当前工作目录的文件（确保 .csproj 文件存在）
       - name: List project files
         run: |
           dir  # 在 Windows 上列出当前工作目录的所有文件
 
-      # 使用 GCC 编译项目
-      - name: Build FakeBlueScreen
+      # 使用 .NET 编译项目
+      - name: Build project
         run: |
-          gcc -o FakeBlueScreen FakeBlueScreen.c -lgdi32 -luser32
+          dotnet build "模拟蓝屏.csproj" --configuration Release
 
       # 上传编译后的文件
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
           name: FakeBlueScreen-executable
-          path: FakeBlueScreen.exe
+          path: bin/Release/net6.0/模拟蓝屏.exe  # 调整路径以适应你的输出目录
