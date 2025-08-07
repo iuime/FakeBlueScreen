@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022  # 你可以选择 windows-2022 或继续使用 windows-latest
 
     steps:
       # 检出代码
@@ -30,7 +30,7 @@ jobs:
 
       # 上传编译后的文件
       - name: Upload executable
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: FakeBlueScreen-executable
           path: FakeBlueScreen.exe
