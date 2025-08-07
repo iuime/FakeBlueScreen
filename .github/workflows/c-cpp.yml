@@ -28,10 +28,10 @@ jobs:
         run: |
           dir  # 在 Windows 上列出当前工作目录的所有文件
 
-      # 安装 Windows 工作负载（可能需要的资源生成支持）
-      - name: Install Windows Workloads
+      # 安装 Windows 桌面工作负载
+      - name: Install Windows Desktop Workload
         run: |
-          dotnet workload install microsoft-net-sdk-windowsdesktop
+          dotnet workload install windowsdesktop
 
       # 使用 .NET 编译项目
       - name: Build project
