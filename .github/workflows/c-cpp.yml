@@ -1,23 +1,42 @@
-name: C/C++ CI
+name: Build FakeBlueScreen
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 设置 MinGW 编译器环境
+      - name: Set up MinGW
+        uses: msys2/setup-msys2-action@v2
+        with:
+          msys2_version: '2022.11.06'
+
+      # 安装必要的工具
+      - name: Install dependencies
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm mingw-w64-x86_64-gcc
+
+      # 编译项目
+      - name: Build FakeBlueScreen
+        run: |
+          gcc -o FakeBlueScreen FakeBlueScreen.c -lgdi32 -luser32
+
+      # 上传编译后的文件
+      - name: Upload executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: FakeBlueScreen-executable
+          path: FakeBlueScreen.exe
