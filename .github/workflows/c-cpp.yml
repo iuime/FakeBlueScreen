@@ -1,34 +1,40 @@
-name: Build FakeBlueScreen
+name: Build FakeBlueScreen (Framework)
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: windows-latest
-    
+    runs-on: windows-2022  # 使用 Windows 服务器
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x' # 根据项目实际需要的.NET版本调整
-    
-    - name: Restore dependencies
-      run: dotnet restore
-    
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    
-    - name: Publish
-      run: dotnet publish -c Release -o publish --no-build
-    
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: FakeBlueScreen
-        path: publish/
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 安装 .NET Framework 4.7.2（确保 MSBuild 可用）
+      - name: Install .NET Framework 4.7.2
+        run: |
+          # .NET Framework 是 Windows 自带的，不需要单独安装，但需要确保 MSBuild 可用
+
+      # 列出当前工作目录的文件（确保 .csproj 文件存在）
+      - name: List project files
+        run: |
+          dir  # 在 Windows 上列出当前工作目录的所有文件
+
+      # 使用 MSBuild 构建项目
+      - name: Build project using MSBuild
+        run: |
+          msbuild "模拟蓝屏.csproj" /p:Configuration=Release
+
+      # 上传编译后的文件
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: FakeBlueScreen-executable
+          path: bin\Release\模拟蓝屏.exe  # 根据输出路径调整
