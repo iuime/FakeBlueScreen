@@ -2,45 +2,33 @@ name: Build FakeBlueScreen
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: windows-2022  # 使用 Windows 服务器
-
+    runs-on: windows-latest
+    
     steps:
-      # 检出代码
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 安装 .NET 6 SDK（长期支持版本）
-      - name: Set up .NET 6 SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0'  # 使用 LTS 版本
-
-      # 列出当前工作目录的文件（确保 .csproj 文件存在）
-      - name: List project files
-        run: |
-          dir  # 在 Windows 上列出当前工作目录的所有文件
-
-      # 安装 Windows 桌面工作负载
-      - name: Install Windows Desktop Workload
-        run: |
-          dotnet workload install windowsdesktop
-
-      # 使用 .NET 编译项目
-      - name: Build project
-        run: |
-          dotnet build "模拟蓝屏.csproj" --configuration Release --runtime win-x64
-
-      # 上传编译后的文件
-      - name: Upload executable
-        uses: actions/upload-artifact@v4
-        with:
-          name: FakeBlueScreen-executable
-          path: bin/Release/net6.0/win-x64/模拟蓝屏.exe  # 根据输出路径调整
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x' # 根据项目实际需要的.NET版本调整
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Publish
+      run: dotnet publish -c Release -o publish --no-build
+    
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: FakeBlueScreen
+        path: publish/
