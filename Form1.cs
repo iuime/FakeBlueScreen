@@ -40,7 +40,7 @@ namespace 模拟蓝屏
         {
             #if DEBUG == false
             //Console.WriteLine("删除");
-            deleteSelf();
+            //deleteSelf();
             #endif
         }
 
